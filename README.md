@@ -8,7 +8,7 @@ We have implemented this solution we find optimum route to reduce risk.
 - **Frontend:** React for dashboard development.
 - **Database:** Structured database for data storage.
 - **APIs:** Leveraged various such as Open Weather, OpenAI, Live Flight Status APIs for data collection and integration.
-
+- **LLMs:** Leveraged OpenAi api to get the places descritption that will be on the way.
 ## Implementation Highlights:
 - Utilized Python Flask to create a server and develop route planning algorithms.
 - Integrated React for the frontend dashboard development, ensuring a user-friendly interface.
