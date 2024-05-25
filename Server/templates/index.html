@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airport Route Finder</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map { height: 500px; }
+    </style>
+</head>
+<body>
+    <h1>Find the Best Route Between Indian Airports</h1>
+    <form id="routeForm">
+        <label for="start">Start Airport:</label>
+        <select id="start" name="start">
+            <!-- Populate options dynamically -->
+        </select>
+        <br>
+        <label for="end">End Airport:</label>
+        <select id="end" name="end">
+            <!-- Populate options dynamically -->
+        </select>
+        <br>
+        <button type="submit">Find Route</button>
+    </form>
+    <h2>Best Route:</h2>
+    <div id="routeResult"></div>
+    <div id="map"></div>
+    
+    <script>
+        const airports = {{ airports | tojson }};
+        let map = L.map('map').setView([20.5937, 78.9629], 5);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        $(document).ready(function() {
+            const startSelect = $('#start');
+            const endSelect = $('#end');
+            
+            // Populate the select options
+            for (const [code, [lat, lon, name]] of Object.entries(airports)) {
+                startSelect.append(new Option(`${name} (${code})`, code));
+                endSelect.append(new Option(`${name} (${code})`, code));
+            }
+
+            // Handle form submission
+            $('#routeForm').submit(function(event) {
+                event.preventDefault();
+                
+                const start = $('#start').val();
+                const end = $('#end').val();
+
+                if (start && end) {
+                    $.ajax({
+                        url: '/',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ start, end }),
+                        success: function(response) {
+                            let resultHTML = '<ol>';
+                            let routeLatLngs = [];
+                            response.forEach(airportInfo => {
+                                const { airport, name, lat, lon, weather, description } = airportInfo;
+                                resultHTML += `<li>${name} (${airport}) - [${lat.toFixed(4)}, ${lon.toFixed(4)}]
+                                                <br>Description: ${weather.description}
+                                                <br>Wind Speed: ${weather.wind_speed} m/s
+                                                <br>Wind Direction: ${weather.wind_deg}°
+                                                <br>Specification: ${description}</li>`;
+                                routeLatLngs.push([lat, lon]);
+                            });
+                            resultHTML += '</ol>';
+                            $('#routeResult').html(resultHTML);
+                            
+                            // Plot the route on the map
+                            if (routeLatLngs.length > 0) {
+                                const routePolyline = L.polyline(routeLatLngs, { color: 'blue' }).addTo(map);
+                                map.fitBounds(routePolyline.getBounds());
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
