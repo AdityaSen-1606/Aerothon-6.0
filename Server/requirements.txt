@@ -1,0 +1,10 @@
+Flask
+flask-cors
+networkx
+geopy
+numpy
+scikit-learn
+requests
+openai
+python-dotenv
+gunicorn
