@@ -7,8 +7,15 @@ from sklearn.neighbors import NearestNeighbors
 import requests
 import openai
 from flask_cors import CORS
+import os
+from dotenv import load_dotenv
+
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up OpenAI API key
+openai.api_key= os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 CORS(app)
@@ -178,7 +185,7 @@ def find_best_route(start, end):
 
 # Function to get weather data from OpenWeatherMap API
 def get_weather_data(lat, lon):
-    api_key = ""
+    api_key = os.getenv("OPENWEATHER_API_KEY")
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}"
     response = requests.get(url)
     if response.status_code == 200:
