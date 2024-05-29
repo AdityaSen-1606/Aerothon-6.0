@@ -1,5 +1,8 @@
 # Flight Navigation Optimization Solution for Aerothon 6.0 by Airbus
 
+#Website is Live: https://route-zeta.vercel.app/
+#Note Server may be down due to OPEN API Key Security
+
 ## Solution:
 We have implemented this solution we find optimum route to reduce risk.
 
