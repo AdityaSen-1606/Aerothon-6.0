@@ -3,6 +3,9 @@
 #Website is Live: https://route-zeta.vercel.app/
 #Note Server may be down due to OPEN API Key Security
 
+![image](https://github.com/AdityaSen-1606/Aerothon-6.0/assets/76251309/305e48f0-f5dd-41e9-a2aa-761c0cedfec9)
+
+
 ## Solution:
 We have implemented this solution we find optimum route to reduce risk.
 
